@@ -9,17 +9,14 @@
     <script src="http://localhost:8080/script"></script>
 </head>
 <body>
-    <div id="container" hx-target="this" hx-swap="none" hx-trigger="load", hx-post="/gql" hx-ext="hx-gql" query="setup" handler="setup">
-        <div hx-target="this" hx-swap="innerHTML" hx-trigger="click" hx-post="/gql" hx-ext="hx-gql" query="language" handler="golang" vars="language:golang">
+    <div></div>
+    <div hx-swap="none" hx-trigger="load", hx-post="/gql" hx-ext="hx-gql" query="setup" handler="setup">
+        <div id="helloGO" hx-target="#helloGO" hx-swap="innerHTML" hx-trigger="click" hx-post="/gql" hx-ext="hx-gql" query="language" handler="go" vars="language:golang">
             Click me to run a plugin written in Go!!
         </div>
         <br>
-        <div hx-target="this" hx-swap="innerHTML" hx-trigger="click" hx-post="/gql" hx-ext="hx-gql" query="language" handler="rust" vars="language:rust">
+        <div id="helloRust" hx-target="#helloRust" hx-swap="innerHTML" hx-trigger="click" hx-post="/gql" hx-ext="hx-gql" query="language" handler="rust" vars="language:rust">
             Click me to run a plugin written in Rust!!
-        </div>
-        <br>
-        <div hx-target="this" hx-swap="innerHTML" hx-trigger="click" hx-post="/gql" hx-ext="hx-gql" query="language" handler="javascript" vars="language:javascript">
-            Click me to run a plugin written in JavaScript!!
         </div>
     </div>
 </body>

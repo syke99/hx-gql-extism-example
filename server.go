@@ -16,6 +16,8 @@ const defaultPort = "8080"
 
 //go:embed client/dist/index.html
 //go:embed client/dist/assets/js/main.js
+//go:embed client/dist/assets/wasm/plugin-go.wasm
+//go:embed client/dist/assets/wasm/plugin-rust.wasm
 var f embed.FS
 
 func main() {
@@ -31,13 +33,39 @@ func main() {
 	http.Handle("/", http.StripPrefix("/", http.FileServer(http.FS(static))))
 	http.Handle("/script", func() http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
-			fb, er := f.ReadFile("client/dist/main.js")
+			fb, er := f.ReadFile("client/dist/assets/js/main.js")
 			if er != nil {
 				http.Error(w, "script not found", 404)
 				return
 			}
 
 			w.Header().Set("content-type", "application/json")
+
+			_, _ = w.Write(fb)
+		}
+	}())
+	http.Handle("/wasm/go", func() http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+			fb, er := f.ReadFile("client/dist/assets/wasm/plugin-go.wasm")
+			if er != nil {
+				http.Error(w, "wasm module not found", 404)
+				return
+			}
+
+			w.Header().Set("content-type", "application/wasm")
+
+			_, _ = w.Write(fb)
+		}
+	}())
+	http.Handle("/wasm/rust", func() http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+			fb, er := f.ReadFile("client/dist/assets/wasm/plugin-rust.wasm")
+			if er != nil {
+				http.Error(w, "wasm module not found", 404)
+				return
+			}
+
+			w.Header().Set("content-type", "application/wasm")
 
 			_, _ = w.Write(fb)
 		}
