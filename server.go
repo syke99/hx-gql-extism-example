@@ -15,7 +15,7 @@ import (
 const defaultPort = "8080"
 
 //go:embed client/dist/index.html
-//go:embed client/dist/main.js
+//go:embed client/dist/assets/js/main.js
 var f embed.FS
 
 func main() {

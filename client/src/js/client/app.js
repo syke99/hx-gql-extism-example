@@ -26,7 +26,7 @@ registerHandler("setup", (response) => {
     return "";
 });
 
-registerHandler("golang", (response) => {
+registerHandler("go", (response) => {
     let resJSON = JSON.parse(response);
 
     console.log(resJSON)
@@ -36,7 +36,7 @@ registerHandler("golang", (response) => {
 });
 
 
-registerHandler("golang", (response) => {
+registerHandler("go", (response) => {
     let resJSON = JSON.parse(response);
 
     // TODO: write plugin and load with extism
