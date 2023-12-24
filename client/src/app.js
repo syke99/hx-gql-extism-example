@@ -56,8 +56,3 @@ registerHandler("javascript", (response) => {
     // TODO: write plugin and load with extism
     return `<div>I was loaded from a WASM plugin written in ${resJSON.data.responses[0].language} and executed with Extism!!</div>`;
 });
-
-registerHandler("setup", (response) => {
-
-})
-
