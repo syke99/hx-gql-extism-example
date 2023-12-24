@@ -1,5 +1,5 @@
 import { registerGqlEndpoint, registerQuery, registerHandler } from "hx-gql";
-import { createPlugin } from "@extism/extism";
+import { callPluginWithInput } from './plugin'
 
 registerGqlEndpoint("http//127.0.0.1:8080/gql");
 
@@ -28,7 +28,9 @@ registerHandler("setup", (response) => {
 registerHandler("go", (response) => {
     let resJSON = JSON.parse(response);
 
-    console.log(resJSON)
+    let out = callPluginWithInput("/wasm/go", `${resJSON.data.responses[0].language}`);
+
+    console.log(out)
 
     return `<div>done</div>`;
 });
@@ -36,6 +38,9 @@ registerHandler("go", (response) => {
 registerHandler("rust", (response) => {
     let resJSON = JSON.parse(response);
 
-    // TODO: write plugin and load with extism
-    return `<div>I was loaded from a WASM plugin written in ${resJSON.data.responses[0].language} and executed with Extism!!</div>`;
+    let out = callPluginWithInput("/wasm/rust", `${resJSON.data.responses[0].language}`);
+
+    console.log(out)
+
+    return `<div>done</div>`;
 });
