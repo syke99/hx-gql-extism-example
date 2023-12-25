@@ -1,5 +1,5 @@
 import { registerGqlEndpoint, registerQuery, registerHandler } from "hx-gql";
-import { callPluginWithInput } from './plugin'
+import {handleResponse, setupOverride} from "hx-gql/plugin";
 
 registerGqlEndpoint("http//127.0.0.1:8080/gql");
 
@@ -28,19 +28,39 @@ registerHandler("setup", (response) => {
 registerHandler("go", (response) => {
     let resJSON = JSON.parse(response);
 
-    let out = callPluginWithInput("/wasm/go", `${resJSON.data.responses[0].language}`);
-
-    console.log(out)
-
     return `<div>done</div>`;
 });
 
 registerHandler("rust", (response) => {
     let resJSON = JSON.parse(response);
 
-    let out = callPluginWithInput("/wasm/rust", `${resJSON.data.responses[0].language}`);
-
-    console.log(out)
-
     return `<div>done</div>`;
 });
+
+
+htmx.defineExtension('hx-gql:override', {
+    onEvent : function (name, event) {
+        if (name === "htmx:configRequest") {
+            setupOverride(event);
+        }
+
+        if (name === "htmx:afterRequest") {
+            handleResponse(event);
+        }
+    },
+
+    encodeParameters : function(xhr, parameters, element) {
+        xhr.overrideMimeType('text/json');
+        return (parameters)
+    },
+
+    transformResponse : function(text, xhr, element) {
+        element.setAttribute("response", text)
+
+        console.log(element)
+
+        htmx.trigger(element, 'swapWithPlugin', {})
+
+        return text;
+    }
+})
