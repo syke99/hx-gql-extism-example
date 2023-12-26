@@ -14,10 +14,10 @@ import (
 
 const defaultPort = "8080"
 
-//go:embed client/dist/index.html
-//go:embed client/dist/assets/js/main.js
-//go:embed client/dist/assets/wasm/plugin-go.wasm
-//go:embed client/dist/assets/wasm/plugin-rust.wasm
+//go:embed client/distro/index.html
+//go:embed client/distro/assets/js/main.js
+//go:embed client/distro/assets/wasm/plugin-go.wasm
+//go:embed client/distro/assets/wasm/plugin-rust.wasm
 var f embed.FS
 
 func main() {
@@ -28,12 +28,12 @@ func main() {
 
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
 
-	static, _ := fs.Sub(f, "client/dist")
+	static, _ := fs.Sub(f, "client/distro")
 
 	http.Handle("/", http.StripPrefix("/", http.FileServer(http.FS(static))))
 	http.Handle("/script", func() http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
-			fb, er := f.ReadFile("client/dist/assets/js/main.js")
+			fb, er := f.ReadFile("client/distro/assets/js/main.js")
 			if er != nil {
 				http.Error(w, "script not found", 404)
 				return
@@ -46,7 +46,7 @@ func main() {
 	}())
 	http.Handle("/wasm/go", func() http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
-			fb, er := f.ReadFile("client/dist/assets/wasm/plugin-go.wasm")
+			fb, er := f.ReadFile("client/distro/assets/wasm/plugin-go.wasm")
 			if er != nil {
 				http.Error(w, "wasm module not found", 404)
 				return
@@ -59,7 +59,7 @@ func main() {
 	}())
 	http.Handle("/wasm/rust", func() http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
-			fb, er := f.ReadFile("client/dist/assets/wasm/plugin-rust.wasm")
+			fb, er := f.ReadFile("client/distro/assets/wasm/plugin-rust.wasm")
 			if er != nil {
 				http.Error(w, "wasm module not found", 404)
 				return
