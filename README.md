@@ -9,7 +9,7 @@
 
 1. run this command to build the client:
    ```
-   cd client && nmp run build
+   cd client && npm install && nmp run build
    ```
 2. run this command to start the backing GraphQL server
    (the server will auto-seed itself once you visit `localhost:8080`)
