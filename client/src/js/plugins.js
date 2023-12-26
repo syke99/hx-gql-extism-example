@@ -41,7 +41,7 @@ function addPlugin(element, sourceLanguage) {
                 rendered = rendered.slice(0, -1);
             }
 
-            element.innerHTML = rendered;
+            element.outerHTML = rendered;
         }
 
         await plugin.close();
