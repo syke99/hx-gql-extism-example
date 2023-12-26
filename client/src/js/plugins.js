@@ -39,8 +39,6 @@ function addPlugin(element, sourceLanguage) {
 
             if (rendered.endsWith("`")) {
                 rendered = rendered.slice(0, -1);
-
-                console.log(rendered)
             }
 
             element.innerHTML = rendered;

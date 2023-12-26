@@ -25,44 +25,14 @@ registerHandler("setup", (response) => {
     return "";
 });
 
-registerHandler("go", (element, response) => {
-    // let resJSON = JSON.parse(response);
-    //
-    // element.setAttribute("response", text)
-    //
-    // let language = JSON.parse(text).data.responses[0].language
-    //
-    // htmx.trigger(element, 'swapWithPlugin', {res: language})
-
-    return "";
-});
-
-registerHandler("rust", (element, response) => {
+registerHandler("extism", (element, response) => {
     let resJSON = JSON.parse(response);
 
+    element.setAttribute("response", response)
+
+    let language = resJSON.language
+
+    htmx.trigger(element, 'swapWithPlugin', {res: language})
+
     return "";
 });
-
-
-htmx.defineExtension('hx-gql:override', {
-    onEvent : function (name, event) {
-        if (name === "htmx:configRequest") {
-            setupOverride(event);
-        }
-    },
-
-    encodeParameters : function(xhr, parameters, element) {
-        xhr.overrideMimeType('text/json');
-        return (parameters)
-    },
-
-    transformResponse : function(text, xhr, element) {
-        element.setAttribute("response", text)
-
-        let language = JSON.parse(text).data.responses[0].language
-
-        htmx.trigger(element, 'swapWithPlugin', {res: language})
-
-        return text;
-    }
-})
