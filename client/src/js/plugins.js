@@ -3,13 +3,16 @@ import {createPlugin} from '@extism/extism';
 export function addPluginListeners () {
     console.log("adding Extism plugins")
 
-    let element = document.getElementById("helloGO")
+    let languages = ["go", "rust"];
 
-    addPlugin(element, "go")
+    let languageIDs = {
+        "go": "helloGO",
+        "rust": "helloRust"
+    };
 
-    element = document.getElementById("helloRust");
-
-    addPlugin(element, "rust");
+    languages.forEach((language) => {
+        addPlugin(document.getElementById(languageIDs[language]), language)
+    })
 
     console.log("plugins added")
 }
@@ -42,6 +45,14 @@ function addPlugin(element, sourceLanguage) {
             }
 
             element.outerHTML = rendered;
+
+            // let renderedAttr = document.createAttribute("rendered")
+            //
+            // renderedAttr.value = rendered
+            //
+            // element.setAttributeNode(renderedAttr)
+            //
+            // console.log(element.getAttribute("rendered"))
         }
 
         await plugin.close();

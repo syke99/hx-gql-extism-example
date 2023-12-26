@@ -28,11 +28,22 @@ registerHandler("setup", (response) => {
 registerHandler("extism", (element, response) => {
     let resJSON = JSON.parse(response);
 
-    element.setAttribute("response", response)
-
     let language = resJSON.data.responses[0].language
 
     htmx.trigger(element, 'swapWithPlugin', {res: language})
+
+    // let notRendered = true;
+    //
+    // let rendered = "";
+    //
+    // while (notRendered) {
+    //     if (element.getAttribute("rendered")) {
+    //         rendered = element.getAttribute("rendered")
+    //         notRendered = false;
+    //     }
+    // }
+    //
+    // return rendered;
 
     return "";
 });
