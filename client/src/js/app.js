@@ -25,16 +25,22 @@ registerHandler("setup", (response) => {
     return "";
 });
 
-registerHandler("go", (response) => {
-    let resJSON = JSON.parse(response);
+registerHandler("go", (element, response) => {
+    // let resJSON = JSON.parse(response);
+    //
+    // element.setAttribute("response", text)
+    //
+    // let language = JSON.parse(text).data.responses[0].language
+    //
+    // htmx.trigger(element, 'swapWithPlugin', {res: language})
 
-    return `<div>done</div>`;
+    return "";
 });
 
-registerHandler("rust", (response) => {
+registerHandler("rust", (element, response) => {
     let resJSON = JSON.parse(response);
 
-    return `<div>done</div>`;
+    return "";
 });
 
 
@@ -42,10 +48,6 @@ htmx.defineExtension('hx-gql:override', {
     onEvent : function (name, event) {
         if (name === "htmx:configRequest") {
             setupOverride(event);
-        }
-
-        if (name === "htmx:afterRequest") {
-            handleResponse(event);
         }
     },
 
@@ -57,9 +59,9 @@ htmx.defineExtension('hx-gql:override', {
     transformResponse : function(text, xhr, element) {
         element.setAttribute("response", text)
 
-        console.log(element)
+        let language = JSON.parse(text).data.responses[0].language
 
-        htmx.trigger(element, 'swapWithPlugin', {})
+        htmx.trigger(element, 'swapWithPlugin', {res: language})
 
         return text;
     }

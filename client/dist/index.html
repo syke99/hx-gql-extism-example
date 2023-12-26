@@ -11,37 +11,13 @@
 <body>
     <div></div>
     <div hx-swap="none" hx-trigger="load", hx-post="/gql" hx-ext="hx-gql" query="setup" handler="setup">
-        <div id="helloGO" hx-target="#helloGO" hx-swap="none" hx-trigger="click" hx-post="/gql" hx-ext="hx-gql" query="language" handler="go" vars="language:golang">
+        <div id="helloGO" hx-swap="none" hx-trigger="click" hx-post="/gql" hx-ext="hx-gql:override" query="language" handler="go" vars="language:golang">
             Click me to run a plugin written in Go!!
         </div>
         <br>
-        <div id="helloRust" hx-target="#helloRust" hx-swap="innerHTML" hx-trigger="click" hx-post="/gql" hx-ext="hx-gql" query="language" handler="rust" vars="language:rust">
+        <div id="helloRust" hx-swap="none" hx-trigger="click" hx-post="/gql" hx-ext="hx-gql:override" query="language" handler="rust" vars="language:rust">
             Click me to run a plugin written in Rust!!
         </div>
     </div>
-<!--    modules    -->
-    <script type="module">
-        import { createPlugin } from 'https://esm.sh/@extism/extism';
-
-        document.onload = function () {
-            async function runGoPlugin() {
-                let element = document.getElementById("helloGO")
-
-                let input = element.getAttribute("response");
-
-                console.log(input)
-
-                const plugin = await createPlugin("http://localhost:8080/wasm/go", {useWasi: true});
-
-                let result = await plugin.call("language", input).text();
-
-                element.innerHTML = result;
-
-                await plugin.close();
-            }
-
-            document.getElementById("helloGO").addEventListener('swapWithPlugin', runGoPlugin)
-        }
-    </script>
 </body>
 </html>
