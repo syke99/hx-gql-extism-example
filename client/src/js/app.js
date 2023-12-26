@@ -30,7 +30,7 @@ registerHandler("extism", (element, response) => {
 
     element.setAttribute("response", response)
 
-    let language = resJSON.language
+    let language = resJSON.data.responses[0].language
 
     htmx.trigger(element, 'swapWithPlugin', {res: language})
 
