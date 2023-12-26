@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="">
+    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+    <script src="http://localhost:8080/script"></script>
+</head>
+<body>
+    <div></div>
+    <div hx-swap="none" hx-trigger="load", hx-post="/gql" hx-ext="hx-gql" query="setup" handler="setup">
+        <div id="helloGO" hx-swap="none" hx-trigger="click" hx-post="/gql" hx-ext="hx-gql" query="language" handler="extism" vars="language:golang">
+            Click me to run a plugin written in Go!!
+        </div>
+        <br>
+        <div id="helloRust" hx-swap="none" hx-trigger="click" hx-post="/gql" hx-ext="hx-gql" query="language" handler="extism" vars="language:rust">
+            Click me to run a plugin written in Rust!!
+        </div>
+    </div>
+</body>
+</html>

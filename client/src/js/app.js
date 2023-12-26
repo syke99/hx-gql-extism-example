@@ -1,5 +1,5 @@
 import { registerGqlEndpoint, registerQuery, registerHandler } from "hx-gql";
-import { callPluginWithInput } from './plugin'
+import {handleResponse, setupOverride} from "hx-gql/plugin";
 
 registerGqlEndpoint("http//127.0.0.1:8080/gql");
 
@@ -25,22 +25,14 @@ registerHandler("setup", (response) => {
     return "";
 });
 
-registerHandler("go", (response) => {
+registerHandler("extism", (element, response) => {
     let resJSON = JSON.parse(response);
 
-    let out = callPluginWithInput("/wasm/go", `${resJSON.data.responses[0].language}`);
+    element.setAttribute("response", response)
 
-    console.log(out)
+    let language = resJSON.language
 
-    return `<div>done</div>`;
-});
+    htmx.trigger(element, 'swapWithPlugin', {res: language})
 
-registerHandler("rust", (response) => {
-    let resJSON = JSON.parse(response);
-
-    let out = callPluginWithInput("/wasm/rust", `${resJSON.data.responses[0].language}`);
-
-    console.log(out)
-
-    return `<div>done</div>`;
+    return "";
 });
