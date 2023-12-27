@@ -34,11 +34,13 @@ registerPlugin("helloGO", {manifest: "http://localhost:8080/wasm/go", callback: 
 
 registerPlugin("helloRust", {manifest: "http://localhost:8080/wasm/rust", callback: addPlugin})
 
-function addPlugin(element, parent, manifest) {
+function addPlugin(element, manifest) {
     async function runPlugin(event) {
         let input = JSON.parse(event.detail.res.responseText).data.responses[0].language;
 
         let id = event.detail.extismUUID;
+
+        let parent = element.parentElement;
 
         const plugin = await createPlugin(manifest, {useWasi: true});
 

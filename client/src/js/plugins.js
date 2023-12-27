@@ -12,11 +12,9 @@ export function addPluginListeners() {
     for (const [key, value] of plugins) {
         let element = document.getElementById(key);
 
-        let parentElem = element.parentElement;
-
         let cb = value.callback;
 
-        cb(element, parentElem, value.manifest);
+        cb(element, value.manifest);
     }
 
     console.log("plugins added");
