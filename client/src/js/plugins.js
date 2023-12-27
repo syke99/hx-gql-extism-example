@@ -22,7 +22,7 @@ export function addPluginListeners () {
     console.log("plugins added");
 }
 
-htmx.defineExtension("extism", {
+htmx.defineExtension("hx-extism", {
     onEvent : function (name, event) {
         if (name === "htmx:afterSettle") {
             let res = JSON.parse(event.detail.xhr.responseText);
