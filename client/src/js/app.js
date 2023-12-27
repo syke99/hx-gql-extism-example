@@ -1,5 +1,5 @@
 import { registerGqlEndpoint, registerQuery, registerHandler } from "hx-gql";
-import { registerPlugin } from "./plugins";
+import {addExtismSwapEventCallback, registerPlugin} from "./plugins";
 import { createPlugin } from "@extism/extism";
 
 registerGqlEndpoint("http//127.0.0.1:8080/gql");
@@ -73,5 +73,5 @@ function addPlugin(element, parent, manifest) {
         await plugin.close();
     }
 
-    element.addEventListener('swapWithPlugin', runPlugin);
+    addExtismSwapEventCallback(element, runPlugin);
 }

@@ -22,10 +22,14 @@ export function addPluginListeners () {
     console.log("plugins added");
 }
 
+export function addExtismSwapEventCallback(element, callback) {
+    element.addEventListener('extismSwap', callback);
+}
+
 htmx.defineExtension("hx-extism", {
     onEvent : function (name, event) {
         if (name === "htmx:afterSettle") {
-            htmx.trigger(event.detail.elt, "swapWithPlugin", {extismUUID: `extism-${uuidv4()}`, res: event.detail.xhr})
+            htmx.trigger(event.detail.elt, "extismSwap", {extismUUID: `extism-${uuidv4()}`, res: event.detail.xhr})
         }
     }
 })
