@@ -3,7 +3,7 @@ import {createPlugin} from '@extism/extism';
 onmessage = async (event) => {
     let endpoint = event.data === "golang" ? "go" : "rust";
 
-    const plugin = await createPlugin("http://localhost:8080/wasm/" + endpoint, {useWasi: true});
+    const plugin = await createPlugin("http://localhost:8080/wasm/" + endpoint);
 
     let hasRenderFunc = await plugin.functionExists("render")
 
