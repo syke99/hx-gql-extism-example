@@ -15,9 +15,7 @@ import (
 const defaultPort = "8080"
 
 //go:embed client/distro/index.html
-//go:embed client/distro/assets/js/main.js
-//go:embed client/distro/assets/wasm/plugin-go.wasm
-//go:embed client/distro/assets/wasm/plugin-rust.wasm
+//go:embed client/distro/assets/*
 var f embed.FS
 
 func main() {
@@ -30,44 +28,41 @@ func main() {
 
 	static, _ := fs.Sub(f, "client/distro")
 
+	mainJS, err := f.ReadFile("client/distro/assets/src/js/index.js")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	goWasm, err := f.ReadFile("client/distro/assets/wasm/plugin-go.wasm")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	rustWasm, err := f.ReadFile("client/distro/assets/wasm/plugin-rust.wasm")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	http.Handle("/", http.StripPrefix("/", http.FileServer(http.FS(static))))
 	http.Handle("/script", func() http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
-			fb, er := f.ReadFile("client/distro/assets/js/main.js")
-			if er != nil {
-				http.Error(w, "script not found", 404)
-				return
-			}
-
 			w.Header().Set("content-type", "application/json")
 
-			_, _ = w.Write(fb)
+			_, _ = w.Write(mainJS)
 		}
 	}())
 	http.Handle("/wasm/go", func() http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
-			fb, er := f.ReadFile("client/distro/assets/wasm/plugin-go.wasm")
-			if er != nil {
-				http.Error(w, "wasm module not found", 404)
-				return
-			}
-
 			w.Header().Set("content-type", "application/wasm")
 
-			_, _ = w.Write(fb)
+			_, _ = w.Write(goWasm)
 		}
 	}())
 	http.Handle("/wasm/rust", func() http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
-			fb, er := f.ReadFile("client/distro/assets/wasm/plugin-rust.wasm")
-			if er != nil {
-				http.Error(w, "wasm module not found", 404)
-				return
-			}
-
 			w.Header().Set("content-type", "application/wasm")
 
-			_, _ = w.Write(fb)
+			_, _ = w.Write(rustWasm)
 		}
 	}())
 

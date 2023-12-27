@@ -1,6 +1,8 @@
 import { registerGqlEndpoint, registerQuery, registerHandler } from "hx-gql";
 import {handleResponse, setupOverride} from "hx-gql/plugin";
 
+import { callPlugin } from './plugins'
+
 registerGqlEndpoint("http//127.0.0.1:8080/gql");
 
 const languageQuery = `    query Response($language: String!)  {
@@ -28,22 +30,11 @@ registerHandler("setup", (response) => {
 registerHandler("extism", (element, response) => {
     let resJSON = JSON.parse(response);
 
-    let language = resJSON.data.responses[0].language
+    let language = resJSON.data.responses[0].language;
 
-    htmx.trigger(element, 'swapWithPlugin', {res: language})
+    console.log("calling extismWorker");
 
-    // let notRendered = true;
-    //
-    // let rendered = "";
-    //
-    // while (notRendered) {
-    //     if (element.getAttribute("rendered")) {
-    //         rendered = element.getAttribute("rendered")
-    //         notRendered = false;
-    //     }
-    // }
-    //
-    // return rendered;
+    callPlugin(element, language, response);
 
     return "";
 });

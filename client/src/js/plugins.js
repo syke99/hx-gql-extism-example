@@ -1,62 +1,17 @@
-import {createPlugin} from '@extism/extism';
+export function callPlugin(element, language) {
+    extismWorker.onmessage = (event) => {
+        console.log(`message received from extismWorker: ${event.data}`)
 
-export function addPluginListeners () {
-    console.log("adding Extism plugins")
+        if (typeof element === 'string' || element instanceof String) {
+            let elem = document.getElementById(element);
 
-    let languages = ["go", "rust"];
-
-    let languageIDs = {
-        "go": "helloGO",
-        "rust": "helloRust"
-    };
-
-    languages.forEach((language) => {
-        addPlugin(document.getElementById(languageIDs[language]), language)
-    })
-
-    console.log("plugins added")
-}
-
-function addPlugin(element, sourceLanguage) {
-    async function runPlugin(event) {
-        let input = event.detail.res;
-
-        const plugin = await createPlugin("http://localhost:8080/wasm/" + sourceLanguage, {useWasi: true});
-
-        let hasRenderFunc = await plugin.functionExists("render")
-
-        if (!hasRenderFunc) {
-            element.innerHTML = input
+            elem.outerHTML = event.data;
+        } else if (element === null || element === undefined) {
+            console.error("no element for plugin to replace");
         } else {
-            let output = await plugin.call("render", input);
-
-            let rendered = output.text();
-
-            // for some reason, despite recompiling the rust plugin,
-            // it's prepending and appending the string with backticks,
-            // so just removing those here instead of trying to fix with
-            // recompiling again
-            if (rendered.startsWith("`")) {
-                rendered = rendered.slice(1);
-            }
-
-            if (rendered.endsWith("`")) {
-                rendered = rendered.slice(0, -1);
-            }
-
-            element.outerHTML = rendered;
-
-            // let renderedAttr = document.createAttribute("rendered")
-            //
-            // renderedAttr.value = rendered
-            //
-            // element.setAttributeNode(renderedAttr)
-            //
-            // console.log(element.getAttribute("rendered"))
+            element.outerHTML = event.data;
         }
-
-        await plugin.close();
     }
 
-    element.addEventListener('swapWithPlugin', runPlugin);
+    extismWorker.postMessage(language);
 }
