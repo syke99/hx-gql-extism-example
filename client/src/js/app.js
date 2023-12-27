@@ -1,5 +1,5 @@
 import { registerGqlEndpoint, registerQuery, registerHandler } from "hx-gql";
-import {addExtismSwapEventCallback, registerPlugin} from "./plugins";
+import { addExtismSwapEventCallback, registerPlugin } from "./plugins";
 import { createPlugin } from "@extism/extism";
 
 registerGqlEndpoint("http//127.0.0.1:8080/gql");
@@ -42,7 +42,7 @@ function addPlugin(element, parent, manifest) {
 
         const plugin = await createPlugin(manifest, {useWasi: true});
 
-        let hasRenderFunc = await plugin.functionExists("render")
+        let hasRenderFunc = await plugin.functionExists("render");
 
         if (hasRenderFunc) {
             let output = await plugin.call("render", input);
