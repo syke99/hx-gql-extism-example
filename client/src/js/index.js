@@ -1,11 +1,9 @@
 import 'htmx.org';
 import './app';
-import {addPluginListeners, registerPlugin} from './plugins';
+import { setupAppRegistrations } from "./setup";
+import { addPluginListeners } from './plugins';
 
-let plugins = {
-    "helloGo": "go",
-    "helloRust": "rust"
-}
+setupAppRegistrations();
 
 window.onload = addPluginListeners;
 

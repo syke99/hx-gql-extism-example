@@ -1,40 +1,7 @@
-import { registerGqlEndpoint, registerQuery, registerHandler } from "hx-gql";
-import { addExtismSwapEventCallback, registerPlugin } from "./plugins";
+import { addExtismSwapEventCallback } from "./plugins";
 import { createPlugin } from "@extism/extism";
 
-registerGqlEndpoint("http//127.0.0.1:8080/gql");
-
-const languageQuery = `    query Response($language: String!)  {
-    responses(language: $language){
-        language
-    }
-}`;
-
-registerQuery("language", languageQuery);
-
-const setupQuery = `    mutation CreateResponse{
-  createResponse(input:[{language: "golang"},{language: "rust"},{language: "javascript"}]) {
-    language
-  }
-}`;
-
-registerQuery("setup", setupQuery);
-
-registerHandler("setup", (response) => {
-    let resJSON = JSON.parse(response);
-
-    return "";
-});
-
-registerHandler("extism", (element, response) => {
-    return "";
-});
-
-registerPlugin("helloGO", {manifest: "http://localhost:8080/wasm/go", callback: addPlugin});
-
-registerPlugin("helloRust", {manifest: "http://localhost:8080/wasm/rust", callback: addPlugin})
-
-function addPlugin(element, manifest) {
+export function addPlugin(element, manifest) {
     async function runPlugin(event) {
         let input = JSON.parse(event.detail.res.responseText).data.responses[0].language;
 
