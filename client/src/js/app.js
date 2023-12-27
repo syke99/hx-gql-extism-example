@@ -1,5 +1,6 @@
 import { registerGqlEndpoint, registerQuery, registerHandler } from "hx-gql";
-import {handleResponse, setupOverride} from "hx-gql/plugin";
+import { registerPlugin } from "./plugins";
+import { createPlugin } from "@extism/extism";
 
 registerGqlEndpoint("http//127.0.0.1:8080/gql");
 
@@ -26,13 +27,51 @@ registerHandler("setup", (response) => {
 });
 
 registerHandler("extism", (element, response) => {
-    let resJSON = JSON.parse(response);
-
-    element.setAttribute("response", response)
-
-    let language = resJSON.data.responses[0].language
-
-    htmx.trigger(element, 'swapWithPlugin', {res: language})
-
     return "";
 });
+
+registerPlugin("helloGO", {manifest: "http://localhost:8080/wasm/go", callback: addPlugin});
+
+registerPlugin("helloRust", {manifest: "http://localhost:8080/wasm/rust", callback: addPlugin})
+
+function addPlugin(element, parent, manifest) {
+    async function runPlugin(event) {
+        let input = event.detail.res.data.responses[0].language;
+
+        let id = event.detail.uuid;
+
+        const plugin = await createPlugin(manifest, {useWasi: true});
+
+        let hasRenderFunc = await plugin.functionExists("render")
+
+        if (hasRenderFunc) {
+            let output = await plugin.call("render", input);
+
+            let rendered = output.text();
+
+            // for some reason, despite recompiling the rust plugin,
+            // it's prepending and appending the string with backticks,
+            // so just removing those here instead of trying to fix with
+            // recompiling again
+            if (rendered.startsWith("`")) {
+                rendered = rendered.slice(1);
+            }
+
+            if (rendered.endsWith("`")) {
+                rendered = rendered.slice(0, -1);
+            }
+
+            let replacement = document.createElement('div');
+
+            replacement.innerHTML = rendered;
+
+            replacement.id = id;
+
+            parent.replaceChild(replacement, element);
+        }
+
+        await plugin.close();
+    }
+
+    element.addEventListener('swapWithPlugin', runPlugin);
+}

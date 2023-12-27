@@ -17,6 +17,7 @@
   "dependencies": {
     "@extism/extism": "^1.0.0-rc9",
     "htmx.org": "^1.9.10",
-    "hx-gql": "^0.1.1"
+    "hx-gql": "^0.1.1",
+    "uuid": "^9.0.1"
   }
 }
