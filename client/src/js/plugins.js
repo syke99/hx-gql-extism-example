@@ -25,7 +25,7 @@ export function addPluginListeners () {
 htmx.defineExtension("hx-extism", {
     onEvent : function (name, event) {
         if (name === "htmx:afterSettle") {
-            htmx.trigger(event.detail.elt, "swapWithPlugin", {uuid: `extism-${uuidv4()}`, res: event.detail.xhr})
+            htmx.trigger(event.detail.elt, "swapWithPlugin", {extismUUID: `extism-${uuidv4()}`, res: event.detail.xhr})
         }
     }
 })

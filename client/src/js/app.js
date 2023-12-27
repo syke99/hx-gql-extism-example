@@ -38,7 +38,7 @@ function addPlugin(element, parent, manifest) {
     async function runPlugin(event) {
         let input = JSON.parse(event.detail.res.responseText).data.responses[0].language;
 
-        let id = event.detail.uuid;
+        let id = event.detail.extismUUID;
 
         const plugin = await createPlugin(manifest, {useWasi: true});
 
