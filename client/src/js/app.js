@@ -36,7 +36,7 @@ registerPlugin("helloRust", {manifest: "http://localhost:8080/wasm/rust", callba
 
 function addPlugin(element, parent, manifest) {
     async function runPlugin(event) {
-        let input = event.detail.res.data.responses[0].language;
+        let input = JSON.parse(event.detail.res.responseText).data.responses[0].language;
 
         let id = event.detail.uuid;
 
